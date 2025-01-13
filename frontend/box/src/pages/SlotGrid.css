@@ -1,0 +1,32 @@
+.slot-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .slot {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .slot.available {
+    background-color: green;
+    color: white;
+  }
+  
+  .slot.booked {
+    background-color: gray;
+    color: white;
+    cursor: not-allowed;
+  }
+  
+  .slot.TEMPORARILY_BLOCKED {
+    background-color: blue;
+    color: white;
+    cursor: not-allowed;
+  }
+  
