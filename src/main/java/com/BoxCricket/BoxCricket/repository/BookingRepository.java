@@ -11,14 +11,14 @@ import java.util.Optional;
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     
-    List<Booking> findByUserId(Long userId);
+    // List<Booking> findByUserId(Long userId);
 
-    List<Booking> findByVenueId(Long venueId);
+    // List<Booking> findByVenueId(Long venueId);
 
-    @Query("SELECT b FROM Booking b WHERE b.venue.id = :venueId AND b.bookingDate = :bookingDate AND b.timeSlot = :timeSlot")
-    Optional<Booking> findByVenueAndDateAndTime(Long venueId, String bookingDate, String timeSlot);
+    // @Query("SELECT b FROM Booking b WHERE b.venue.id = :venueId AND b.bookingDate = :bookingDate AND b.timeSlot = :timeSlot")
+    // Optional<Booking> findByVenueAndDateAndTime(Long venueId, String bookingDate, String timeSlot);
 
-    @Query("SELECT b FROM Booking b WHERE b.venue.id = :venueId AND b.bookingDate = :bookingDate")
-    Optional<Booking> findByVenueIdAndBookingDate(Long venueId, String bookingDate);
+    // @Query("SELECT b FROM Booking b WHERE b.venue.id = :venueId AND b.bookingDate = :bookingDate")
+    // Optional<Booking> findByVenueIdAndBookingDate(Long venueId, String bookingDate);
 }
 

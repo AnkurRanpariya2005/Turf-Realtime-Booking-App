@@ -1,6 +1,7 @@
 package com.BoxCricket.BoxCricket.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -32,17 +33,12 @@ public class Booking {
     @JoinColumn(name = "venue_id", nullable = false)
     private Venue venue;
 
-    @Column(nullable = false)
-    private String bookingDate;
 
-    @Column(nullable = false)
-    private String timeSlot;
+    private String date;
+    private String slot; 
 
-    @Enumerated(EnumType.STRING)
-    private BookingStatus status;
+    private LocalDateTime createdAt = LocalDateTime.now(); 
 
-    @CreationTimestamp
-    private LocalDateTime blockedAt;
 
 
 }

@@ -1,5 +1,6 @@
 package com.BoxCricket.BoxCricket.controller;
 
+import com.BoxCricket.BoxCricket.dto.VenueDto;
 import com.BoxCricket.BoxCricket.entity.User;
 import com.BoxCricket.BoxCricket.entity.Venue;
 import com.BoxCricket.BoxCricket.repository.VenueRepository;
@@ -23,8 +24,8 @@ public class UserController {
     private VenueRepository venueRepository;
 
     @GetMapping("/venues")
-    public List<Venue> getAllVenues() {
-        return venueRepository.findAll();
+    public List<VenueDto> getAllVenues() {
+        return venueRepository.findAllVenues();
     }
 
     // User: Fetch venue details by ID

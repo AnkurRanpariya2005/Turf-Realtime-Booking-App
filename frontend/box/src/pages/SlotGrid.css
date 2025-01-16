@@ -1,32 +1,48 @@
 .slot-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 10px;
-    margin-top: 20px;
-  }
-  
-  .slot {
-    padding: 10px;
-    text-align: center;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  .slot.available {
-    background-color: green;
-    color: white;
-  }
-  
-  .slot.booked {
-    background-color: gray;
-    color: white;
-    cursor: not-allowed;
-  }
-  
-  .slot.TEMPORARILY_BLOCKED {
-    background-color: blue;
-    color: white;
-    cursor: not-allowed;
-  }
-  
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+.slot {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.slot.available {
+  background-color: #4caf50; /* Green for available slots */
+}
+
+.slot.selected {
+  background-color: #2196f3; /* Blue for selected slots by current user */
+}
+
+.slot.blocked {
+  background-color: #b0b0b0; /* Gray for blocked slots by others */
+}
+
+.slot.selected:hover {
+  background-color: #1976d2; /* Darker blue for selected slot hover */
+}
+
+.slot.blocked:hover {
+  background-color: #8c8c8c; /* More dark gray for blocked slots hover */
+}
+
+.slot:hover {
+  background-color: #f0f0f0; /* Light gray hover for available slots */
+}
+
+.slot.booked {
+  background-color: darkgray;
+  color: white;
+  cursor: not-allowed;
+}
+
+button.disabled {
+  background-color: lightgray;
+  color: #888;
+  cursor: not-allowed;
+}

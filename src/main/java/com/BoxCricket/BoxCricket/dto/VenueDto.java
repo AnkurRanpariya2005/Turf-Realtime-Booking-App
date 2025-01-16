@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class VenueDto {
     
+    private Long id;
     private String name;
     private String location;
     private String dimension;
