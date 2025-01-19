@@ -31,18 +31,10 @@ const OwnerRegister = () => {
 
 
   useEffect(() => {
-        if (token ) {
-          try {
-            const decodedToken = jwtDecode(token);
-            const role = decodedToken?.role;
-            
-            if(role==="OWNER")
-            navigate("/owner-dashboard");
-          }
-          catch (error) {
-            console.log(error);
-          }
-        }
+    // console.log("User", user);
+    if (token) {
+      navigate("/dashboard");
+    }
   }, [token, navigate]);
 
 

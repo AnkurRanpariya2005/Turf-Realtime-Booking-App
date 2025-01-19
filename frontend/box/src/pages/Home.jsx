@@ -7,6 +7,7 @@ import Navbar from "../components/Navbar";
 const Home = () => {
   return (
     <div>
+
       <Header />
       <SpecialityMenu />
       <TopDoctors />
@@ -16,3 +17,5 @@ const Home = () => {
 };
 
 export default Home;
+
+

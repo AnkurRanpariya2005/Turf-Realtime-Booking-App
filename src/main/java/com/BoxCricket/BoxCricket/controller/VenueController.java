@@ -1,6 +1,7 @@
 package com.BoxCricket.BoxCricket.controller;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,9 @@ import com.BoxCricket.BoxCricket.response.ApiResponse;
 import com.BoxCricket.BoxCricket.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/venue")
@@ -46,6 +50,7 @@ public class VenueController {
         venue.setLocation(venueDto.getLocation());
         venue.setDimension(venueDto.getDimension());
         venue.setPricePerHour(venueDto.getPricePerHour());
+        venue.setImageUrl(venueDto.getImageUrl());
         venue.setOwner(owner);
         venueRepository.save(venue);
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -80,5 +85,13 @@ public class VenueController {
         
         return venueRepository.save(venue);
     }
+
+    @GetMapping
+    public Venue getMethodName(@RequestParam Long venueId) {
+        Venue data = venueRepository.findById(venueId).orElse(null);
+
+        return data;
+    }
+    
     
 }

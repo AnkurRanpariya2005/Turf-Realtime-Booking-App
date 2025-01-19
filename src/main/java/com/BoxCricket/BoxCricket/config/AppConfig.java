@@ -42,7 +42,7 @@ public class AppConfig {
                                     .requestMatchers("/api/auth/**", "/swagger-ui/**","/v3/api-docs/**","/ws/**","/socket.io/**", "/api/**").permitAll()
                                     .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                                     .requestMatchers("/api/owner/**","/api/venue/**").hasAuthority("OWNER")
-                                    .requestMatchers("/api/user/**","/api/**").hasAuthority("USER")
+                                    .requestMatchers("/api/user/**","/api/venue/**","/api/**").hasAuthority("USER")
                                      .anyRequest().authenticated()
                                             )
                     .httpBasic(Customizer.withDefaults())
@@ -60,7 +60,7 @@ public class AppConfig {
             @Override
             public CorsConfiguration getCorsConfiguration(HttpServletRequest arg0) {
                 CorsConfiguration cfg = new CorsConfiguration();    
-                cfg.setAllowedOrigins(Arrays.asList("http://localhost:5174/"));
+                cfg.setAllowedOrigins(Arrays.asList("http://localhost:5173/"));
                 cfg.setAllowedMethods(Collections.singletonList("*"));
                 cfg.setAllowedHeaders(Collections.singletonList("*"));
                 cfg.setAllowCredentials(true);

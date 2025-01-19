@@ -7,7 +7,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import MyProfile from "./pages/MyProfile";
 import MyAppointments from "./pages/MyAppointments";
-import Appointment from "./pages/Appointment";
+import Appointment1 from "./pages/Appointment1";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Message from "./components/Message";
@@ -23,6 +23,11 @@ import {jwtDecode} from "jwt-decode"
 import OwnerHome from "./pages/Owner/OwnerHome";
 import AddTurf from "./pages/Owner/AddTurf";
 import Turfs from "./pages/Turfs";
+import Home1 from "./pages/Home1";
+import Navbar1 from "./components/Navbar1";
+import Test from "./pages/Test";
+import MyBooking from "./pages/Owner/MyBooking";
+import MyVenues from "./pages/Owner/MyVenues";
 
 
 const App = () => {
@@ -47,14 +52,17 @@ const App = () => {
   }, [token]);
 
   return (
-   <>
-      <Navbar />
+   <div className="bg-gray-900">
+      {/* <Navbar /> */}
+      <Navbar1/>
       <div className="">
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/test" element={<Test />} />
+
         <Route path="/user-register" element={<UserRegister />} />
         <Route path="/owner-register" element={<OwnerRegister />} />
-        <Route path="/" element={<Home />} index />
+        <Route path="/" element={<Home1 />} index />
 
 
         {role==="OWNER"?(
@@ -62,6 +70,9 @@ const App = () => {
           <Route element={<OwnerRouter />}>
             <Route path="/dashboard" element={<OwnerHome />}></Route>
             <Route path="/add/turf" element={<AddTurf />}></Route>
+            <Route path="/my-venues" element={<MyVenues />}></Route>
+            <Route path="/my-venues/my-bookings/:venueId" element={<MyBooking />}></Route>
+
 
 
 
@@ -78,7 +89,7 @@ const App = () => {
         <Route path="/dashboard" element={<Dashboard />}></Route>
 
         <Route path="/turfs" element={<Turfs />} />
-        <Route path="/appointment/:turfId" element={<Appointment />} />
+        <Route path="/appointment/:turfId" element={<Appointment1 />} />
 
 
         <Route path="/doctors/:speciality" element={<Doctors />} />
@@ -91,7 +102,7 @@ const App = () => {
       </Routes>
       {/* <Footer /> */}
     </div>
-    </>
+    </div>
   );
 };
 

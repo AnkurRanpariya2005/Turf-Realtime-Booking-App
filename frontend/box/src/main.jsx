@@ -18,7 +18,7 @@ createRoot(document.getElementById('root')).render(
           <AppContextProvider>
           <ThemeProvider>
             <App />
-</ThemeProvider>
+          </ThemeProvider>
           </AppContextProvider>
           <ToastContainer position="top-right" autoClose={4000} />
         </BrowserRouter>

@@ -22,7 +22,7 @@ import {
   ChevronDownIcon,
   ArrowLeftStartOnRectangleIcon,
 } from "@heroicons/react/24/outline";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 function OwnerSidebar() {
@@ -36,12 +36,13 @@ function OwnerSidebar() {
   };
 
   const LIST_ITEM_STYLES =
-    "text-gray-900 hover:text-black focus:text-black active:text-black hover:bg-opacity-10 focus:bg-opacity-200 active:bg-opacity-20";
+    "text-gray-200 hover:text-white focus:text-white active:text-black hover:bg-opacity-10 focus:bg-opacity-200 active:bg-opacity-20";
 
   return (
+    <aside id="default-sidebar" className=" bg-gray-800 mt-12 fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
     <Card
       color="white"
-      className="h-[calc(100vh-2rem)] w-full max-w-[20rem]  p-6 shadow-md"
+      className="mt-12 bg-gray-800  h-[calc(100vh-2rem)] w-full max-w-[20rem]  p-6 shadow-md"
     >
     
       <List>
@@ -81,12 +82,14 @@ function OwnerSidebar() {
           </ListItemPrefix>
           Add Turf
         </ListItem>
+        <Link to="/my-venues">
         <ListItem className={LIST_ITEM_STYLES}>
           <ListItemPrefix>
             <TicketIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Orders
+          My Venues
         </ListItem>
+        </Link>
         <ListItem className={LIST_ITEM_STYLES}>
           <ListItemPrefix>
             <UserGroupIcon className="h-5 w-5" />
@@ -116,6 +119,7 @@ function OwnerSidebar() {
 
     
     </Card>
+    </aside>
   );
 }
 

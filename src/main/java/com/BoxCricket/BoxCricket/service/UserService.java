@@ -39,7 +39,7 @@ public class UserService {
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     public ResponseEntity<ApiResponse<?>> registerUser(User user) throws Exception {
-
+        user.setRole(Role.USER);
         User oldUser = userRepository.findByEmail(user.getEmail());
 
         if(oldUser != null){
@@ -57,9 +57,9 @@ public class UserService {
 
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
-        String token = jwtService.generateToken(user.getEmail(),Role.USER);
-
-        userRepository.save(newUser);
+        User savedUser = userRepository.save(newUser);
+        String token = jwtService.generateToken(savedUser.getId(),Role.USER);
+        
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ApiResponse<>(true, "User Registered Succesfully", Map.of("token",token))
             );
@@ -85,9 +85,11 @@ public class UserService {
 
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
-        String token = jwtService.generateToken(user.getEmail(),Role.OWNER);
 
-        userRepository.save(newUser);
+        User savedUser = userRepository.save(newUser);
+        String token = jwtService.generateToken(savedUser.getId(),Role.OWNER);
+
+        
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ApiResponse<>(true, "User Registered Succesfully", Map.of("token",token))
             );
@@ -99,7 +101,7 @@ public class UserService {
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
         if (authentication.isAuthenticated()) {
             User authenticatedUser = findByEmail(user.getEmail());
-            String token = jwtService.generateToken(user.getEmail(), authenticatedUser.getRole());;
+            String token = jwtService.generateToken(authenticatedUser.getId(), authenticatedUser.getRole());;
             return ResponseEntity.status(HttpStatus.OK).body(
                 new ApiResponse<>(true, "Login Successfully", Map.of("token", token))
                 );
@@ -170,12 +172,22 @@ public class UserService {
     public User getUserByToken(String token) {
 
         String pureToken = token.substring(7);
-        String email = jwtService.extractUserName(pureToken);
+        String id = jwtService.extractUserId(pureToken);
 
         log.info(token,"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
-        User user = findByEmail(email);
-        return user;
+        User user;
+        try {
+            user = findById(Long.valueOf(id));
+            return user;
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        
     }
 
 

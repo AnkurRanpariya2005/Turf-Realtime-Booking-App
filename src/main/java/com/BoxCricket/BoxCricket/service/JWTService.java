@@ -1,15 +1,13 @@
 package com.BoxCricket.BoxCricket.service;
 
-import javax.crypto.KeyGenerator;
+
 import javax.crypto.SecretKey;
-import java.util.Base64;
-import java.security.NoSuchAlgorithmException;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.BoxCricket.BoxCricket.dto.Role;
@@ -19,45 +17,35 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
+
+
 @Service
 public class JWTService {
 
-    private String secretkey = "";
+    private String secretkey = "5367566B59703373367639792F423F4528482B4D6251655468576D5A7134743";
 
-    public JWTService() {
 
-        try {
-            KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
-            SecretKey sk = keyGen.generateKey();
-            secretkey = Base64.getEncoder().encodeToString(sk.getEncoded());
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    
-    public String generateToken(String username, Role role){
-
+    public String generateToken(Long userId, Role role){
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", role);
         return Jwts.builder()
                 .claims()
                 .add(claims)
-                .subject(username)
+                .subject(String.valueOf(userId))
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 60L * 60L * 24L * 365L * 5)) // 5 years
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 365)) 
                 .and()
-                .signWith(getKey())
+                .signWith(getKey(),Jwts.SIG.HS256)
                 .compact();
-
-
     }
+
 
     private SecretKey getKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretkey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String extractUserName(String token) {
+    public String extractUserId(String token) {
         // extract the username from jwt token
         return extractClaim(token, Claims::getSubject);
     }
@@ -75,9 +63,9 @@ public class JWTService {
                 .getPayload();
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
-        final String userName = extractUserName(token);
-        return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    public boolean validateToken(String token, Long userId) {
+        final Long tokenUserId = Long.parseLong(extractUserId(token));
+        return (tokenUserId.equals(userId) && !isTokenExpired(token));
     }
 
     private boolean isTokenExpired(String token) {

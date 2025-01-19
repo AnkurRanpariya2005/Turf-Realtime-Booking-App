@@ -19,6 +19,7 @@ public class VenueDto {
     private String location;
     private String dimension;
     private BigDecimal pricePerHour;
+    private String ImageUrl;
 
    
 
