@@ -1,15 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./SlotGrid.css";
 
+
+
 const SlotGrid = ({ slots, onSlotToggle, selectedSlots, userId }) => {
+
+
+
   return (
     <div className="slot-grid">
-      {Object.entries(slots).map(([timeSlot, { status, userId: slotUserId }]) => {
+      {Object.entries(slots).map(([timeSlot, slotData]) => {
+  if (!slotData) return null; // Skip null or undefined slot data
+
+  const { status, userId: slotUserId, currentUserId } = slotData;
         const isSelectedByCurrentUser =
-          status === "blocked" && slotUserId === userId;
+          status === "SelectedCurrentUser" && currentUserId === userId;
+          // Check if the slot is blocked or selected by another user
+        const isBlocked =
+          status === "Blocked";
         const isBlockedByOtherUser =
-          status === "blocked" && slotUserId !== userId;
-        const isAvailable = status === "available";
+          status === "SelectedCurrentUser" && userId !== currentUserId;
+        const isAvailable = status === "Available";
 
         let slotClass = "";
         let isClickable = true; // Default to clickable
@@ -19,6 +30,9 @@ const SlotGrid = ({ slots, onSlotToggle, selectedSlots, userId }) => {
         } else if (isBlockedByOtherUser) {
           slotClass = "blocked"; // Blocked by another user (gray)
           isClickable = false; // Not clickable if blocked by another user
+        }else if (isBlocked) {
+            slotClass = "blocked"; // Blocked by another user (gray)
+            isClickable = false; // Not clickable if blocked by another user
         } else if (isAvailable) {
           slotClass = "available"; // Available (green)
         }
