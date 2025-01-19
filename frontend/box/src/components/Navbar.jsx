@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { assets } from "../assets/assets";
 import { NavLink, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { LOGIN_REQUEST, LOGIN_SUCCESS } from "../redux/Auth/auth.actionType";

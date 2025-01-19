@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { assets } from "../assets/assets";
 
 const MyProfile = () => {
   const [userData, setUserData] = useState({
