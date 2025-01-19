@@ -186,16 +186,6 @@ const stompClient = Stomp.over(socket);
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
 
-  // // Refresh slots every 5 seconds
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     if (selectedDate) {
-  //       fetchSlots(); // Fetch updated slot status
-  //     }
-  //   }, 5000); // Poll every 5 seconds
-
-  //   return () => clearInterval(interval);
-  // }, []);
 
 
     // Handle booking

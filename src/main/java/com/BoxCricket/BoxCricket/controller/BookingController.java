@@ -60,14 +60,16 @@ public class BookingController {
         for (String slot : timeSlots) {
             String slotKey = generateSlotKey(venueId, date, slot);
             String blockedUserId = redisTemplate.opsForValue().get(slotKey);
+            log.info(blockedUserId+"############################3");
     
             if (blockedUserId != null) {
-                if (blockedUserId.equals(userId.toString())) {
+                if (blockedUserId.toString().equals(userId.toString())) {
+                    // log.info("##################$$$$$$$$$$$$$$$%%%%%%%%%%%%%%%%%%%%");
                     // If the current user has blocked the slot
                     slots.put(slot, new SlotStatus(blockedUserId, "SelectedCurrentUser", userId.toString()));
                 } else {
                     // If another user has blocked the slot
-                    slots.put(slot, new SlotStatus(blockedUserId, "Blocked", null));
+                    slots.put(slot, new SlotStatus(blockedUserId, "Blocked", blockedUserId.toString()));
                 }
             } else {
                 // Check if the slot is booked (e.g., stored as "BOOKED" in Redis or database)
