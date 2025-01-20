@@ -90,10 +90,13 @@ function AddTurf() {
   };
 
   return (<>
+  <div>
     <OwnerSidebar />
-    <form onSubmit={handleSubmit} className="mt-16 ml-100 min-h-screen justify-center items-center max-w-sm mx-auto text-gray-100">
+    </div>
+    <div className="mt-16">
+    <form onSubmit={handleSubmit} className="mt-16 ml-100 min-h-screen justify-center items-center max-w-sm mx-auto text-black">
       <div className="mb-5">
-        <label className="block mb-2 text-sm font-medium">Upload Image</label>
+        <label className="block mb-2 text-sm font-medium text-white">Upload Image</label>
         <input
           type="file"
           onChange={(e) => setSelectedFile(e.target.files[0])}
@@ -111,7 +114,7 @@ function AddTurf() {
       </div>
 
       <div className="mb-5">
-        <label htmlFor="name" className="block mb-2 text-sm font-medium">
+        <label htmlFor="name" className="block mb-2 text-sm font-medium text-white">
           Turf Name
         </label>
         <input
@@ -126,7 +129,7 @@ function AddTurf() {
       </div>
 
       <div className="mb-5">
-        <label htmlFor="location" className="block mb-2 text-sm font-medium">
+        <label htmlFor="location" className="block mb-2 text-sm font-medium text-white">
           Location
         </label>
         <input
@@ -141,7 +144,7 @@ function AddTurf() {
       </div>
 
       <div className="mb-5">
-        <label htmlFor="dimension" className="block mb-2 text-sm font-medium">
+        <label htmlFor="dimension" className="block mb-2 text-sm font-medium text-white">
           Enter Dimension
         </label>
         <input
@@ -156,7 +159,7 @@ function AddTurf() {
       </div>
 
       <div className="mb-5">
-        <label htmlFor="pricePerHour" className="block mb-2 text-sm font-medium">
+        <label htmlFor="pricePerHour" className="block mb-2 text-sm font-medium text-white">
           Price per Hour
         </label>
         <input
@@ -178,6 +181,7 @@ function AddTurf() {
         Add Turf
       </button>
     </form>
+    </div>
     </>
   );
 }

@@ -42,16 +42,16 @@ const Login = () => {
     <><Formik initialValues={initialValues} onSubmit={onSubmitHandler} validationSchema={validationSchema}>
       {({ handleSubmit }) => (
         <Form onSubmit={handleSubmit}>
-          <div className="min-h-[80vh] flex justify-center items-center">
+          <div className="min-h-[80vh] flex justify-center items-center text-black h-screen">
             {loading ? (<div className=""><PacmanLoader color="#5f6fff" /></div>) : (
-              <div className="flex flex-col gap-3 m-auto items-start p-8 min-w-[340px] sm:min-w-96 border rounded-xl text-zinc-600 text-sm shadow-lg">
+              <div className="flex flex-col gap-3 m-auto items-start p-8 min-w-[340px] sm:min-w-96 border rounded-xl text-zinc-600 text-sm shadow-lg bg-white">
                 <p className="text-2xl font-semibold">
                 </p>
                 <p>
                   Please Register to book
                   appointment
                 </p>
-                <div className="w-full">
+                <div className="w-full ">
                   <p>Email</p>
                   <Field
                     as={TextField}
@@ -60,7 +60,7 @@ const Login = () => {
                     type="email"
                     variant="outlined"
                     fullWidth
-                    className="mt-1" />
+                    className="mt-1 bg-white" />
                   <ErrorMessage
                     name="email"
                     component="div"
@@ -75,7 +75,7 @@ const Login = () => {
                     type="password"
                     variant="outlined"
                     fullWidth
-                    className="mt-1" />
+                    className="mt-1 bg-white" />
                   <ErrorMessage
                     name="password"
                     component="div"

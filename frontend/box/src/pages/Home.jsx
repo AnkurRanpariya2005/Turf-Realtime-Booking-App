@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar1 from '../components/Navbar1'
 import HeroSection from '../components/HeroSection'
+import { Link } from 'react-router-dom'
 
 function Home() {
   return (
@@ -34,9 +35,11 @@ function Home() {
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-3xl font-semibold text-gray-200">Are You a Turf Owner?</h2>
           <p className="mt-4 text-gray-600">Add your turf and let users book it instantly. It's easy and quick!</p>
+          <Link to="/owner-register" >
           <button className="mt-6 px-8 py-3 bg-blue-500 text-black rounded-lg hover:bg-blue-400 transition-all">
-            Add a Turf
+            Add Turf
           </button>
+          </Link>
         </div>
       </section>
 

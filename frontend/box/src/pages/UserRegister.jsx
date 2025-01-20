@@ -42,9 +42,9 @@ const UserRegister = () => {
     <Formik initialValues={initialValues} onSubmit={onSubmitHandler} validationSchema={validationSchema}>
       {({ handleSubmit }) => (
         <Form onSubmit={handleSubmit}>
-          <div className="min-h-[80vh] flex justify-center items-center">
+          <div className="min-h-[100vh] flex justify-center items-center">
           {loading?(<div className=""><PacmanLoader color="#5f6fff" /></div>):(
-            <div className="flex flex-col gap-3 m-auto items-start p-8 min-w-[340px] sm:min-w-96 border rounded-xl text-zinc-600 text-sm shadow-lg">
+            <div className="flex flex-col gap-3 m-auto items-start p-8 min-w-[340px] sm:min-w-96 border rounded-xl text-zinc-600 text-sm shadow-lg bg-white">
               <p className="text-2xl font-semibold">
                 Create Account
               </p>
@@ -61,7 +61,7 @@ const UserRegister = () => {
                       type="text"
                       variant="outlined"
                       fullWidth
-                      className="mt-1"
+                      className="mt-1 bg-white"
                     />
                     <ErrorMessage
                       name="name"
@@ -78,7 +78,7 @@ const UserRegister = () => {
                       type="text"
                       variant="outlined"
                       fullWidth
-                      className="mt-1"
+                      className="mt-1 bg-white"
                     />
                     <ErrorMessage
                       name="phone"
@@ -96,7 +96,7 @@ const UserRegister = () => {
                   type="email"
                   variant="outlined"
                   fullWidth
-                  className="mt-1"
+                  className="mt-1 bg-white"
                 />
                 <ErrorMessage
                   name="email"
@@ -113,7 +113,7 @@ const UserRegister = () => {
                   type="password"
                   variant="outlined"
                   fullWidth
-                  className="mt-1"
+                  className="mt-1 bg-white"
                 />
                 <ErrorMessage
                   name="password"
