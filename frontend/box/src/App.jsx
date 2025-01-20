@@ -25,7 +25,10 @@ import Home from "./pages/Home";
 import Navbar1 from "./components/Navbar1";
 import Test from "./pages/Test";
 import MyBooking from "./pages/Owner/MyBooking";
+import UserMyBooking from "./pages/User/UserMyBooking";
+
 import MyVenues from "./pages/Owner/MyVenues";
+import Pricing from "./pages/Pricing";
 
 
 const App = () => {
@@ -60,6 +63,8 @@ const App = () => {
         <Route path="/user-register" element={<UserRegister />} />
         <Route path="/owner-register" element={<OwnerRegister />} />
         <Route path="/" element={<Home />} index />
+        
+        <Route path="/pricing" element={<Pricing />} index />
 
 
         {role==="OWNER"?(
@@ -78,6 +83,8 @@ const App = () => {
         ):(
           <Route element={<UserRouter />}>
             <Route path="/dashboard" element={<UserDashboard />}></Route>
+            <Route path="/my-booking" element={<UserMyBooking />}></Route>
+
           </Route>
         )}
 

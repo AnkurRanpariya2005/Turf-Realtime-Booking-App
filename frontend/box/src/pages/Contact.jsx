@@ -1,36 +1,52 @@
+import React from "react";
 
 const Contact = () => {
   return (
-    <div>
-      <div className="text-center text-2xl pt-10 text-gray-500">
-        <p>
-          CONTACT <span className="text-gray-700 font-semibold">US</span>
+    <div className="mt-16 bg-gray-900 text-gray-200 min-h-screen py-12">
+      <div className="container mx-auto px-6">
+        <h1 className="text-4xl font-bold mb-6 text-center">Contact Us</h1>
+        <p className="text-lg leading-7 text-center max-w-3xl mx-auto mb-10">
+          Have any questions or feedback? We'd love to hear from you!
         </p>
-      </div>
-
-      <div className="my-10 flex flex-col justify-center md:flex-row gap-10 mb-28 text-sm">
-        <img
-          className="w-full md:max-w-[360px]"
-          src={assets.contact_image}
-          alt=""
-        />
-        <div className="flex flex-col justify-center items-start gap-6">
-          <p className="font-semibold text-lg text-gray-600">OUR OFFICE</p>
-          <p className="text-gray-500">
-            54709 Willms Station <br /> Suite 350, Washington, USA
-          </p>
-          <p className="text-gray-500">
-            Tel: (415) 555-0132 <br />
-          </p>
-          <p className="font-semibold text-lg text-gray-600">
-            Carrers at PRESCRIPTO
-          </p>
-          <p className="text-gray-500">
-            Learn more about our teams and job openings.
-          </p>
-          <button className="border border-black px-8 py-4 text-sm hover:bg-black hover:text-white transition-all duration-500">
-            Explore Jobs
-          </button>
+        <div className="max-w-xl mx-auto">
+          <form className="bg-gray-800 rounded-lg shadow-lg p-6">
+            <div className="mb-4">
+              <label className="block text-gray-400 mb-2" htmlFor="name">
+                Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                className="w-full px-4 py-2 bg-gray-900 text-gray-200 border border-gray-700 rounded focus:outline-none focus:border-blue-600"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-400 mb-2" htmlFor="email">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                className="w-full px-4 py-2 bg-gray-900 text-gray-200 border border-gray-700 rounded focus:outline-none focus:border-blue-600"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-400 mb-2" htmlFor="message">
+                Message
+              </label>
+              <textarea
+                id="message"
+                rows="5"
+                className="w-full px-4 py-2 bg-gray-900 text-gray-200 border border-gray-700 rounded focus:outline-none focus:border-blue-600"
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-gray-200 py-2 px-4 rounded"
+            >
+              Send Message
+            </button>
+          </form>
         </div>
       </div>
     </div>

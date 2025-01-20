@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
+import { toast } from "react-toastify";
 
 import React from 'react'
 import { useState, useEffect } from 'react';
@@ -203,6 +204,7 @@ const stompClient = Stomp.over(socket);
         }, { headers })
         .then((response) => {
           console.log("Booking Results:", response.data);
+          toast.success("Booked Successfully")
           setSelectedSlots([]); // Clear selection after booking
         })
         .catch((error) => console.error("Error booking slots:", error));

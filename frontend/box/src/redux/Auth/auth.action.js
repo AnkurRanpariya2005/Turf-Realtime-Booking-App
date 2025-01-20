@@ -65,7 +65,7 @@ export const registerOwnerAction = (registerData) => async(dispatch) => {
             dispatch({type:REGISTER_OWNER_SUCCESS, payload:data})
         }
         else{
-            dispatch({type:REGISTER_OWNER_FAILURE, payload:error})
+            dispatch({type:REGISTER_OWNER_FAILURE, payload:data.message})
             toast.error(data.message)
         }
         

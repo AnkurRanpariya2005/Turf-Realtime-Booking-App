@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from 'react'
-import OwnerSidebar from './OwnerSidebar'
-import { useParams } from 'react-router-dom'
+
+
 import { API_BASE_URL } from '../../config/api';
 import axios from 'axios';
+import { Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
-function MyBooking() {
-    const {venueId} = useParams();
+function UserMyBooking() {
+
     const [booking, setBooking] = useState([]);
-
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+  
     useEffect(()=>{
         const fetchData = async()=>{
-            const response = await axios.get(`${API_BASE_URL}/api/booking/my-booking?venueId=${venueId}`)
+            const response = await axios.get(`${API_BASE_URL}/api/user/my-booking`,{headers})
             if(response){
+                console.log(response)
                 setBooking(response.data)
             }
         }
@@ -22,8 +30,7 @@ function MyBooking() {
     },[])
     return (
         <>
-            <OwnerSidebar />
-
+ 
             
             <div className='bg-gray-700 mt-16 flex flex-col items-center justify-center min-h-screen min-w-full max-w-sm mx-auto text-gray-200'>
 
@@ -34,7 +41,7 @@ function MyBooking() {
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <caption className="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                            Our Bookings
+                            My Appointment
                         </caption>
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         
@@ -78,7 +85,7 @@ function MyBooking() {
                                     {item.user.phone}
                                 </td>
                                 <td className="px-6 py-4 text-right bg-red-500 text-white">
-                                    <a href="#" className="font-medium text-white dark:text-white hover:underline">Cancle</a>
+                                    <Link to="#" className="font-medium rounded-lg bg-red-500 text-white dark:text-white hover:underline">Cancle</Link>
                                 </td>
                             </tr>
                         ))}
@@ -91,4 +98,4 @@ function MyBooking() {
     )
 }
 
-export default MyBooking
+export default UserMyBooking

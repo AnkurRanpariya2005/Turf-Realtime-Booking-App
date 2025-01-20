@@ -1,73 +1,35 @@
+import React from "react";
 
 const About = () => {
   return (
-    <div>
-      <div className="text-center text-2xl pt-10 text-gray-500">
-        <p>
-          ABOUT <span className="text-gray-700 font-medium">US</span>
+    <div className="mt-16 bg-gray-900 text-gray-200 min-h-screen py-12">
+      <div className="container mx-auto px-6">
+        <h1 className="text-4xl font-bold mb-6 text-center">About Us</h1>
+        <p className="text-lg leading-7 text-center max-w-3xl mx-auto mb-10">
+          Welcome to our platform! We are dedicated to connecting sports enthusiasts with the best turfs and box cricket facilities in town. Whether you're here to book a match with friends or add your turf to our platform, we are here to make your experience seamless and enjoyable.
         </p>
-      </div>
-
-      <div className="my-10 flex flex-col md:flex-row gap-12">
-        <img
-          className="w-full md:max-w-[360px]"
-          src={assets.about_image}
-          alt=""
-        />
-        <div className="flex flex-col justify-center gap-6 md:w-2/4 text-sm text-gray-600">
-          <p>
-            Welcome to Prescripto, your trusted partner in managing your
-            healthcare needs conveniently and efficiently. At Prescripto, we
-            understand the challenges individuals face when it comes to
-            scheduling doctor appointments and managing their health records.
-          </p>
-          <p>
-            Prescripto is committed to excellence in healthcare technology. We
-            continuously strive to enhance our platform, integrating the latest
-            advancements to improve user experience and deliver superior
-            service. Whether you're booking your first appointment or managing
-            ongoing care, Prescripto is here to support you every step of the
-            way.
-          </p>
-          <b className="text-gray-800">Our Vision</b>
-          <p>
-            Our vision at Prescripto is to create a seamless healthcare
-            experience for every user. We aim to bridge the gap between patients
-            and healthcare providers, making it easier for you to access the
-            care you need, when you need it.
-          </p>
-        </div>
-      </div>
-
-      <div className="text-xl my-4">
-        <p>
-          WHY <span className="text-gray-700 font-semibold">CHOOSE US</span>
-        </p>
-      </div>
-
-      <div className="flex flex-col md:flex-row mb-20">
-        <div className="border px-10 md:px-16 py-8 sm:py-16 flex flex-col gap-5 text-[15px] hover:bg-primary hover:text-white transition-all duration-300 text-gray-600 cursor-pointer">
-          <b>EFFICIENCY:</b>
-          <p>
-            Streamlined appointment scheduling that fits into your busy
-            lifestyle.
-          </p>
-        </div>
-
-        <div className="border px-10 md:px-16 py-8 sm:py-16 flex flex-col gap-5 text-[15px] hover:bg-primary hover:text-white transition-all duration-300 text-gray-600 cursor-pointer">
-          <b>CONVENIENCE:</b>
-          <p>
-            Access to a network of trusted healthcare professionals in your
-            area.
-          </p>
-        </div>
-
-        <div className="border px-10 md:px-16 py-8 sm:py-16 flex flex-col gap-5 text-[15px] hover:bg-primary hover:text-white transition-all duration-300 text-gray-600 cursor-pointer">
-          <b>PERSONALIZATION:</b>
-          <p>
-            Tailored recommendations and reminders to help you stay on top of
-            your health.
-          </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="bg-gray-800 rounded-lg shadow-lg p-6">
+            <h2 className="text-2xl font-semibold mb-4">Our Mission</h2>
+            <p>
+              To provide a hassle-free booking experience and empower turf owners to manage their bookings efficiently.
+            </p>
+          </div>
+          <div className="bg-gray-800 rounded-lg shadow-lg p-6">
+            <h2 className="text-2xl font-semibold mb-4">Our Vision</h2>
+            <p>
+              To be the leading platform for sports enthusiasts, promoting an active and healthy lifestyle.
+            </p>
+          </div>
+          <div className="bg-gray-800 rounded-lg shadow-lg p-6">
+            <h2 className="text-2xl font-semibold mb-4">Our Values</h2>
+            <ul className="list-disc list-inside">
+              <li>Transparency</li>
+              <li>Innovation</li>
+              <li>Community Building</li>
+              <li>Excellence</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

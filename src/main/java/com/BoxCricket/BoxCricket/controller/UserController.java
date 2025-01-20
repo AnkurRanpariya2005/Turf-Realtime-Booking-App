@@ -1,8 +1,10 @@
 package com.BoxCricket.BoxCricket.controller;
 
 import com.BoxCricket.BoxCricket.dto.VenueDto;
+import com.BoxCricket.BoxCricket.entity.Booking;
 import com.BoxCricket.BoxCricket.entity.User;
 import com.BoxCricket.BoxCricket.entity.Venue;
+import com.BoxCricket.BoxCricket.repository.BookingRepository;
 import com.BoxCricket.BoxCricket.repository.VenueRepository;
 import com.BoxCricket.BoxCricket.service.UserService;
 
@@ -22,6 +24,9 @@ public class UserController {
 
     @Autowired
     private VenueRepository venueRepository;
+
+    @Autowired
+    private BookingRepository bookingRepository;    
 
     @GetMapping("/venues")
     public List<VenueDto> getAllVenues() {
@@ -50,6 +55,15 @@ public class UserController {
         User user = userService.getUserByToken(token);
         user.setPassword(null);
         return user;
+        
+    }
+
+    @GetMapping("/my-booking")
+    public List<Booking> myBookings(@RequestHeader("Authorization") String token) {
+        
+        User user = userService.getUserByToken(token);
+        user.setPassword(null);
+        return bookingRepository.findByUserId(user.getId());
         
     }
     
