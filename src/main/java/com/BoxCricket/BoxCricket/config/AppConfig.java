@@ -39,10 +39,11 @@ public class AppConfig {
 
        return http.csrf(customizer -> customizer.disable())
                     .authorizeHttpRequests(request -> request
-                                    .requestMatchers("/api/auth/**", "/swagger-ui/**","/v3/api-docs/**","/ws/**","/socket.io/**", "/api/**").permitAll()
+                                    .requestMatchers("/api/auth/**","/api/**", "/swagger-ui/**","/v3/api-docs/**","/ws/**","/socket.io/**","/api/home/**").permitAll()
+                                    .requestMatchers("/api/user/venue/**","/api/payment/**").permitAll()
                                     .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
-                                    .requestMatchers("/api/owner/**","/api/venue/**").hasAuthority("OWNER")
-                                    .requestMatchers("/api/user/**","/api/venue/**","/api/**").hasAuthority("USER")
+                                    .requestMatchers("/api/owner/**").hasAuthority("OWNER")
+                                    .requestMatchers("/api/user/**","/api/user/venue/**").hasAuthority("USER")
                                      .anyRequest().authenticated()
                                             )
                     .httpBasic(Customizer.withDefaults())

@@ -29,6 +29,11 @@ import UserMyBooking from "./pages/User/UserMyBooking";
 
 import MyVenues from "./pages/Owner/MyVenues";
 import Pricing from "./pages/Pricing";
+import AdminDashboard from "./pages/Admin/Admin";
+import UserList from "./pages/Admin/UserList";
+import OwnerList from "./pages/Admin/OwnerList";
+import PlanList from "./pages/Admin/PlanList";
+import VenueList from "./pages/Admin/VenueList";
 
 
 const App = () => {
@@ -59,43 +64,43 @@ const App = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/test" element={<Test />} />
-
         <Route path="/user-register" element={<UserRegister />} />
         <Route path="/owner-register" element={<OwnerRegister />} />
-        <Route path="/" element={<Home />} index />
-        
-        <Route path="/pricing" element={<Pricing />} index />
-
+        <Route path="/" element={<Home />} index />  
+      <Route path="/pricing" element={<Pricing />} index />
 
         {role==="OWNER"?(
-
           <Route element={<OwnerRouter />}>
             <Route path="/dashboard" element={<OwnerHome />}></Route>
             <Route path="/add/turf" element={<AddTurf />}></Route>
             <Route path="/my-venues" element={<MyVenues />}></Route>
             <Route path="/my-venues/my-bookings/:venueId" element={<MyBooking />}></Route>
-
-
-
-
           </Route>
 
         ):(
           <Route element={<UserRouter />}>
             <Route path="/dashboard" element={<UserDashboard />}></Route>
             <Route path="/my-booking" element={<UserMyBooking />}></Route>
-
           </Route>
         )}
 
+        {/* admin */}
+        <Route path="/admin-dashboard" element={<AdminDashboard />}></Route>
+        <Route path="/admin-users" element={<UserList />}></Route>
+        <Route path="/admin-owners" element={<OwnerList />}></Route>
+        <Route path="/admin-plans" element={<PlanList />}></Route>
+        <Route path="/admin-venues" element={<VenueList />}></Route>
 
 
+        
+        
+        
+        
+        
+        
         <Route path="/dashboard" element={<Dashboard />}></Route>
-
         <Route path="/turfs" element={<Turfs />} />
         <Route path="/appointment/:turfId" element={<Appointment1 />} />
-
-
         <Route path="/doctors/:speciality" element={<Doctors />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />

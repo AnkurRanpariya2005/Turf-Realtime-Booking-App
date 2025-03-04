@@ -2,7 +2,9 @@ package com.BoxCricket.BoxCricket.service;
 
 import com.BoxCricket.BoxCricket.dto.Role;
 import com.BoxCricket.BoxCricket.entity.User;
+import com.BoxCricket.BoxCricket.entity.Venue;
 import com.BoxCricket.BoxCricket.repository.UserRepository;
+import com.BoxCricket.BoxCricket.repository.VenueRepository;
 import com.BoxCricket.BoxCricket.response.ApiResponse;
 
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.Map;
@@ -28,11 +31,14 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-     @Autowired
+    @Autowired
     private JWTService jwtService;
 
     @Autowired
     AuthenticationManager authManager;
+
+    @Autowired
+    private VenueRepository venueRepository;
 
     
 
@@ -188,6 +194,22 @@ public class UserService {
             return null;
         }
         
+    }
+
+
+    public List<User> getAllOwners() {
+        Role role = Role.OWNER;
+        return userRepository.findByRole(role);
+    }
+
+    public List<User> getAllUsers() {
+        Role role = Role.USER;
+        return userRepository.findByRole(role);
+    }
+    
+
+    public List<Venue> getAllVenues() {
+        return venueRepository.findAll();
     }
 
 

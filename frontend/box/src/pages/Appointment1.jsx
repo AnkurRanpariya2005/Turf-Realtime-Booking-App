@@ -13,6 +13,7 @@ import { format } from 'date-fns';
 import SlotGrid from './SlotGrid';
 import {jwtDecode} from "jwt-decode";
 
+import { API_BASE_URL } from "../config/api";
 
 function Appointment1() {
   const [turfDetails, setTurfDetails] = useState(null);
@@ -20,6 +21,7 @@ function Appointment1() {
   const [slots, setSlots] = useState([])
   const [timeSlots, setTimeSlots] = useState([]);
   const [selectedSlots, setSelectedSlots] = useState([]);
+  const [loading, setLoading]=useState(false)
   const { turfId } = useParams();
 
   const token = localStorage.getItem("token");
@@ -28,22 +30,40 @@ function Appointment1() {
     "Content-Type": "application/json",
   };
 
+  const handlePayment = async () => {
+  
+    try {
+        const response = await axios.post("http://localhost:1234/api/payment/create-checkout-session", {
+            currency: "INR",
+            amount: 1000 * 100, // Convert ₹1000 to paisa
+            successUrl: "http://localhost:5173/payment-success",
+            cancelUrl: "http://localhost:5173/payment-failed",
+        });
 
-const socket = new SockJS("http://localhost:1234/ws");
+        if (response.data.url) {
+            window.location.href = response.data.url; // Redirect to Stripe Checkout
+        }
+    } catch (error) {
+        console.error("Payment Error:", error);
+    }
+    setLoading(false);
+};
+
+const socket = new SockJS(`${API_BASE_URL}/ws`);
 const stompClient = Stomp.over(socket);
 
-// useEffect(() => {
-//   stompClient.connect({}, () => {
-//     const formattedDate = format(selectedDate, 'yyyy-MM-dd');
-//     stompClient.subscribe(`/topic/slots/${turfId}/${formattedDate}`, (message) => {
-//       const slotUpdate = JSON.parse(message.body);
-//       console.log("Slot update received:", slotUpdate);
+useEffect(() => {
+  stompClient.connect({}, () => {
+    const formattedDate = format(selectedDate, 'yyyy-MM-dd');
+    stompClient.subscribe(`/topic/slots/${turfId}/${formattedDate}`, (message) => {
+      const slotUpdate = JSON.parse(message.body);
+      console.log("Slot update received:", slotUpdate);
 
-//       // // Update the slot status in the state
-//       // fetchSlots();
-//     });
-//   });
-// },[])
+      // // Update the slot status in the state
+      // fetchSlots();
+    });
+  });
+},[])
 
   useEffect(() => {
     const formattedDate = format(selectedDate, 'yyyy-MM-dd');
@@ -64,7 +84,7 @@ const stompClient = Stomp.over(socket);
 
   useEffect(()=>{
     const fetchData = async() =>{
-      const response = await axios.get(`http://localhost:1234/api/venue?venueId=${turfId}`, {headers});
+      const response = await axios.get(`${API_BASE_URL}/api/user/venue/${turfId}`, {headers});
       console.log(response)
       if(response){
         setTurfDetails(response.data);
@@ -95,7 +115,7 @@ const stompClient = Stomp.over(socket);
     const formattedDate = format(selectedDate, 'yyyy-MM-dd')
     console.log("sad" + formattedDate)
     await axios
-      .get(`http://localhost:1234/api/booking/slots/${turfId}/${formattedDate}`, {
+      .get(`${API_BASE_URL}/api/booking/slots/${turfId}/${formattedDate}`, {
         headers,
         params: { userId },
       })
@@ -141,7 +161,7 @@ const stompClient = Stomp.over(socket);
       // Unblock the slot
       await axios
         .post(
-          "http://localhost:1234/api/booking/unblock",
+          `${API_BASE_URL}/api/booking/unblock`,
           {
             venueId:turfId,
             date: formattedDate,
@@ -159,7 +179,7 @@ const stompClient = Stomp.over(socket);
       // Block the slot
       await axios
         .post(
-          "http://localhost:1234/api/booking/block",
+          `${API_BASE_URL}/api/booking/block`,
           {
             venueId:turfId,
             date: formattedDate,
@@ -196,7 +216,7 @@ const stompClient = Stomp.over(socket);
       if (selectedSlots.length === 0) return; // Prevent booking with no slots selected
   
       axios
-        .post("http://localhost:1234/api/booking/book", {
+        .post(`${API_BASE_URL}/api/booking/book`, {
           venueId:turfId,
           date: formattedDate,
           slots: selectedSlots,
@@ -372,6 +392,14 @@ const stompClient = Stomp.over(socket);
               className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-400 transition-all"
             >
               Book Now
+            </button>
+
+            <button
+                onClick={handlePayment}
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                disabled={loading}
+            >
+                payment
             </button>
             </center>
           </div>

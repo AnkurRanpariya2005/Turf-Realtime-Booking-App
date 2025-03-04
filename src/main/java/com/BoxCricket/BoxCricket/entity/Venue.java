@@ -29,6 +29,7 @@ public class Venue {
     private String dimension;
     private BigDecimal pricePerHour;
     private String imageUrl;
+    private Integer rating;
 
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)

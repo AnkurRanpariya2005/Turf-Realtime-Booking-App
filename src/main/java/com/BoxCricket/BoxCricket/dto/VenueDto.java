@@ -20,7 +20,6 @@ public class VenueDto {
     private String dimension;
     private BigDecimal pricePerHour;
     private String ImageUrl;
-
-   
+    private Integer rating;
 
 }

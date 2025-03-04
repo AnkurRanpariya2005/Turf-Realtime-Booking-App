@@ -1,5 +1,6 @@
 package com.BoxCricket.BoxCricket.controller;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -24,7 +25,7 @@ import com.BoxCricket.BoxCricket.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -86,12 +87,7 @@ public class VenueController {
         return venueRepository.save(venue);
     }
 
-    @GetMapping
-    public Venue getMethodName(@RequestParam Long venueId) {
-        Venue data = venueRepository.findById(venueId).orElse(null);
 
-        return data;
-    }
     
     
 }

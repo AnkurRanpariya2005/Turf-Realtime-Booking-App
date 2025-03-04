@@ -1,9 +1,67 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar1 from '../components/Navbar1'
 import HeroSection from '../components/HeroSection'
 import { Link } from 'react-router-dom'
+import { API_BASE_URL } from '../config/api'
+import axios from 'axios'
 
 function Home() {
+  const[city, setCity] = useState('')
+  const[venues, setVenues] = useState([]);
+
+  const token = localStorage.getItem("token");
+    const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+    };
+
+  useEffect(() => {
+    async function getCityByIP() {
+      try {
+          let response = await fetch("https://ipwho.is/");
+          let data = await response.json();
+          
+          if (data.city) {
+              console.log("City (from IP):", data.city);
+              setCity(data.city);
+          } else {
+              console.log("Failed to fetch city from IP-based service.");
+          }
+      } catch (error) {
+          console.error("IP-based location failed:", error);
+      }
+  }
+  
+  getCityByIP();
+
+  async function getVenues() {
+    if(city){
+      console.log("City@@@@:", city);
+      try {
+        let response = await axios.get(`${API_BASE_URL}/api/home/get/${city}`,{headers});
+
+        console.log(response.data);
+        if (response) {
+            console.log("Venues:", response.data);
+            setVenues(response.data);
+        } else {
+            console.log("Failed to fetch venues.");
+        }
+    } catch (error) {
+        console.error("Venues fetch failed:", error);
+    }
+    }
+    else{
+      let response = await axios.get(`${API_BASE_URL}/api/home/get/top-venues`,{headers});
+      setVenues(response.data);
+      console.log(response,"@@@@@@");
+    }
+  }
+  getVenues();
+  
+  },[])
+
+
   return (
     <div className='bg-gray-900'>
         
@@ -48,34 +106,19 @@ function Home() {
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-3xl font-semibold text-gray-200">Available Turfs</h2>
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-            <div className="relative overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-all">
-              <img src="https://th.bing.com/th?id=OIP.NAVfn35ndjHq7Fcpa2om5QHaFy&w=282&h=220&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2" alt="Turf 1" className="w-full h-48 object-cover" />
-              <div className="absolute inset-0 bg-black opacity-25"></div>
-              <div className="relative z-10 p-6">
-                <h3 className="text-xl font-semibold text-white">Turf 1</h3>
-                <p className="mt-2 text-white">Located in your area. Book now!</p>
-                <button className="mt-4 px-6 py-2 bg-orange-500 text-black rounded-lg hover:bg-orange-400 transition-all">Book Now</button>
-              </div>
-            </div>
+            
             {/* Repeat for other turfs */}
-            <div className="relative overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-all">
-              <img src="https://th.bing.com/th?id=OIP.NAVfn35ndjHq7Fcpa2om5QHaFy&w=282&h=220&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2" alt="Turf 1" className="w-full h-48 object-cover" />
+            {venues.map((item, index) => (
+            <div key={index} className="relative overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-all">
+              <img src={item.imageUrl} alt="Turf 1" className="w-full h-48 object-cover" />
               <div className="absolute inset-0 bg-black opacity-25"></div>
               <div className="relative z-10 p-6">
-                <h3 className="text-xl font-semibold text-white">Turf 1</h3>
-                <p className="mt-2 text-white">Located in your area. Book now!</p>
-                <button className="mt-4 px-6 py-2 bg-orange-500 text-black rounded-lg hover:bg-orange-400 transition-all">Book Now</button>
+                <h3 className="text-xl font-semibold text-white">{item.name}</h3>
+                <p className="mt-2 text-white">Located in your {item.location}. Book now!</p>
+                <button className="mt-4 px-6 py-2 bg-orange-500 text-black rounded-lg hover:bg-orange-400 transition-all">Book Now {item.id}</button>
               </div>
             </div>
-            <div className="relative overflow-hidden bg-white rounded-lg shadow-lg hover:shadow-xl transition-all">
-              <img src="https://th.bing.com/th?id=OIP.NAVfn35ndjHq7Fcpa2om5QHaFy&w=282&h=220&c=8&rs=1&qlt=90&o=6&dpr=1.1&pid=3.1&rm=2" alt="Turf 1" className="w-full h-48 object-cover" />
-              <div className="absolute inset-0 bg-black opacity-25"></div>
-              <div className="relative z-10 p-6">
-                <h3 className="text-xl font-semibold text-white">Turf 1</h3>
-                <p className="mt-2 text-white">Located in your area. Book now!</p>
-                <button className="mt-4 px-6 py-2 bg-orange-500 text-black rounded-lg hover:bg-orange-400 transition-all">Book Now</button>
-              </div>
-            </div>
+          ))}
             
           </div>
         </div>

@@ -33,7 +33,7 @@ public class UserController {
         return venueRepository.findAllVenues();
     }
 
-    // User: Fetch venue details by ID
+   
     @GetMapping("/venue/{venueId}")
     public Venue getVenueById(@PathVariable Long venueId) {
         return venueRepository.findById(venueId)
