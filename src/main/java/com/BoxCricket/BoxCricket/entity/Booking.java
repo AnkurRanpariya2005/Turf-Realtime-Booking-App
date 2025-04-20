@@ -1,12 +1,6 @@
 package com.BoxCricket.BoxCricket.entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
-
-import org.hibernate.annotations.CreationTimestamp;
-
-import com.BoxCricket.BoxCricket.dto.BookingStatus;
-
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

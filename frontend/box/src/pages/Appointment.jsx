@@ -1,46 +1,261 @@
-import React, { useState, useEffect } from 'react';
+import { useParams } from "react-router-dom";
+
+import SockJS from "sockjs-client";
+import { Stomp } from "@stomp/stompjs";
+import { toast } from "react-toastify";
+
+import React from 'react'
+import { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import axios from "axios";
+import { format } from 'date-fns';
+import SlotGrid from './SlotGrid';
+import {jwtDecode} from "jwt-decode";
 
-const Test = () => {
+import { API_BASE_URL } from "../config/api";
+
+function Appointment() {
   const [turfDetails, setTurfDetails] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [slots, setSlots] = useState([])
   const [timeSlots, setTimeSlots] = useState([]);
-  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [selectedSlots, setSelectedSlots] = useState([]);
+  const [loading, setLoading]=useState(false)
+  const { turfId } = useParams();
+  
+
+  const token = localStorage.getItem("token");
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
+
+  const handlePayment = async () => {
+  
+    try {
+        const numberOfSlot = selectedSlots.length;
+        const formattedDate = format(selectedDate, 'yyyy-MM-dd')
+        const price = turfDetails.pricePerHour*numberOfSlot * 100;
+        const response = await axios.post("http://localhost:1234/api/payment/create-checkout-session", {
+            currency: "INR",
+            amount: price, // Convert ₹1000 to paisa
+            successUrl: `http://localhost:5173/payment-success?venueId=${turfId}&date=${formattedDate}&slots=${JSON.stringify(selectedSlots)}`,
+            cancelUrl: "http://localhost:5173/",
+        });
+
+        if (response.data.url) {
+            window.location.href = response.data.url; // Redirect to Stripe Checkout
+        }
+    } catch (error) {
+        
+        console.error("Payment Error:", error);
+    }
+    setLoading(false);
+};
+
+const socket = new SockJS(`${API_BASE_URL}/ws`);
+const stompClient = Stomp.over(socket);
+
+useEffect(() => {
+  stompClient.connect({}, () => {
+    const formattedDate = format(selectedDate, 'yyyy-MM-dd');
+    stompClient.subscribe(`/topic/slots/${turfId}/${formattedDate}`, (message) => {
+      const slotUpdate = JSON.parse(message.body);
+      console.log("Slot update received:", slotUpdate);
+
+      // // Update the slot status in the state
+      fetchSlots();
+    });
+  });
+
+  return () => {
+    if (stompClient.connected) {
+      stompClient.disconnect();
+    }
+  };
+},[])
 
   useEffect(() => {
-    // Fetch turf details (mocked for now)
-    setTurfDetails({
-      id: 1,
-      name: 'Green Field Turf',
-      location: 'Downtown City',
-      price: 500,
-      image: 'https://flowbite.com/docs/images/products/apple-watch.png',
-      description: 'Green Field Turf offers a high-quality playing surface perfect for cricket enthusiasts. Located in the heart of the city, it features ample parking, floodlights, and refreshments.',
-      amenities: ['Floodlights', 'Parking', 'Refreshments', 'Changing Rooms'],
+    const formattedDate = format(selectedDate, 'yyyy-MM-dd');
+    stompClient.connect({}, () => {
+      const subscription = stompClient.subscribe(`/topic/slots/${turfId}/${formattedDate}`, (message) => {
+        const updatedSlots = JSON.parse(message.body);
+                console.log("Slot updates received:", updatedSlots);
+                setSlots(updatedSlots);
+
+      });
+      // Return a cleanup function to unsubscribe when the component unmounts or the date changes
+    return () => {
+      if (subscription) {
+        subscription.unsubscribe(); // Unsubscribe from the WebSocket topic
+      }
+    };
+      
     });
 
-    // Fetch available time slots from backend (mocked for now)
-    setTimeSlots([
-      '9:00 AM - 10:00 AM',
-      '10:00 AM - 11:00 AM',
-      '11:00 AM - 12:00 PM',
-      '2:00 PM - 3:00 PM',
-      '3:00 PM - 4:00 PM',
-    ]);
-  }, []);
+    return () => {
+      if (stompClient.connected) {
+        stompClient.disconnect(); // Disconnect the WebSocket
+      }
+    };
 
+    
+            
+
+}, [turfId, selectedDate]);
+
+
+
+
+  useEffect(()=>{
+    const fetchData = async() =>{
+      const response = await axios.get(`${API_BASE_URL}/api/user/venue/${turfId}`, {headers});
+      console.log(response)
+      if(response){
+        setTurfDetails(response.data);
+      }
+    }
+    console.log(turfDetails,"#$$$$$$$$$$$$$$$$$$");
+    fetchData();
+  },[])
+
+
+  function getUserIdFromToken() {
+    const token = localStorage.getItem("token"); // Assuming token is stored in localStorage
+    if (token) {
+      const decoded = jwtDecode(token);
+      return decoded.sub; // Or the relevant property from the token
+    }
+    return null; // Return null if no token found
+  }
+
+  const userId = getUserIdFromToken();
+  
+
+
+
+
+  // Fetch slots whenever the date changes
+  const fetchSlots = async() => {
+    const formattedDate = format(selectedDate, 'yyyy-MM-dd')
+    console.log("sad" + formattedDate)
+    await axios
+      .get(`${API_BASE_URL}/api/booking/slots/${turfId}/${formattedDate}`, {
+        headers,
+        params: { userId },
+      })
+      .then((response) => setSlots(response.data))
+      .catch((error) => console.error("Error fetching slots:", error));
+      console.log(slots, "@@@@@@@@")
+  };
+
+  useEffect(() => {
+    if (selectedDate) {
+      fetchSlots(); // Fetch initial slot status
+      
+    }
+  }, [selectedDate]);
+
+
+  // useEffect(() => {
+  //   // Fetch turf details (mocked for now)
+  //   setTurfDetails({
+  //     id: 1,
+  //     name: 'Green Field Turf',
+  //     location: 'Downtown City',
+  //     price: 500,
+  //     image: 'https://flowbite.com/docs/images/products/apple-watch.png',
+  //     description: 'Green Field Turf offers a high-quality playing surface perfect for cricket enthusiasts. Located in the heart of the city, it features ample parking, floodlights, and refreshments.',
+  //     amenities: ['Floodlights', 'Parking', 'Refreshments', 'Changing Rooms'],
+  //   });
+
+  //   // Fetch available time slots from backend (mocked for now)
+  //   setTimeSlots([
+  //     '9:00 AM - 10:00 AM',
+  //     '10:00 AM - 11:00 AM',
+  //     '11:00 AM - 12:00 PM',
+  //     '2:00 PM - 3:00 PM',
+  //     '3:00 PM - 4:00 PM',
+  //   ]);
+  // }, []);
+
+  // Handle slot toggle (select/unselect)
+  const handleSlotToggle = async(slot, isSelected) => {
+    const formattedDate = format(selectedDate, 'yyyy-MM-dd')
+    if (isSelected) {
+      // Unblock the slot
+      await axios
+        .post(
+          `${API_BASE_URL}/api/booking/unblock`,
+          {
+            venueId:turfId,
+            date: formattedDate,
+            slot,
+            userId,
+          },
+          { headers }
+        )
+        .then(() => {
+          setSelectedSlots((prev) => prev.filter((s) => s !== slot)); // Remove from selected
+          fetchSlots(); // Refresh slots
+        })
+        .catch((error) => console.error("Error unblocking slot:", error));
+    } else {
+      // Block the slot
+      await axios
+        .post(
+          `${API_BASE_URL}/api/booking/block`,
+          {
+            venueId:turfId,
+            date: formattedDate,
+            slot,
+            userId,
+          },
+          { headers }
+        )
+        .then(() => {
+          setSelectedSlots((prev) => [...prev, slot]); // Add to selected
+          fetchSlots(); // Refresh slots
+        })
+        .catch((error) => console.error("Error blocking slot:", error));
+    }
+  };
   const handleBooking = () => {
-    if (!selectedSlot) {
+    if (!selectedSlots) {
       alert('Please select a time slot.');
       return;
     }
-    alert(`Booking confirmed for ${selectedDate.toDateString()} at ${selectedSlot}`);
+    alert(`Booking confirmed for ${selectedDate.toDateString()} at ${selectedSlots}`);
   };
 
   if (!turfDetails) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
+
+
+
+    // Handle booking
+    const bookSlots = () => {
+      console.log(selectedSlots)
+      const formattedDate = format(selectedDate, 'yyyy-MM-dd')
+      if (selectedSlots.length === 0) return; // Prevent booking with no slots selected
+
+      axios
+        .post(`${API_BASE_URL}/api/booking/book`, {
+          venueId:turfId,
+          date: formattedDate,
+          slots: selectedSlots,
+          userId: userId,
+        }, { headers })
+        .then((response) => {
+          console.log("Booking Results:", response.data);
+          toast.success("Booked Successfully")
+          setSelectedSlots([]); // Clear selection after booking
+        })
+        .catch((error) => console.error("Error booking slots:", error));
+    };
+  
 
   return (
     <div className="mt-12 w-auto bg-gray-900 min-h-screen py-8">
@@ -49,8 +264,8 @@ const Test = () => {
           {/* Image Section */}
           <div className="lg:w-1/2">
             <img
-              src={turfDetails.image}
-              alt={turfDetails.name}
+              src={turfDetails.imageUrl}
+             
               className="w-full h-80 object-cover border border-gray-800  rounded-lg shadow-lg"
             />
 
@@ -167,15 +382,15 @@ const Test = () => {
           <div className="lg:w-1/2 border border-gray-800 p-5">
             <h1 className="text-3xl font-bold text-gray-200 mb-4">{turfDetails.name}</h1>
             <p className="text-gray-300 mb-4">{turfDetails.location}</p>
-            <p className="text-lg text-green-500 font-bold mb-6">₹{turfDetails.price} per hour</p>
-            <p className="text-gray-400 mb-6">{turfDetails.description}</p>
+            <p className="text-lg text-green-500 font-bold mb-6">₹{turfDetails.pricePerHour} per hour</p>
+            {/* <p className="text-gray-400 mb-6">{turfDetails.description}</p> */}
 
             <h2 className="text-xl font-semibold text-gray-400 mb-4">Amenities</h2>
-            <ul className="list-disc list-inside text-gray-400 mb-6">
+            {/* <ul className="list-disc list-inside text-gray-400 mb-6">
               {turfDetails.amenities.map((amenity, index) => (
                 <li key={index}>{amenity}</li>
               ))}
-            </ul>
+            </ul> */}
 
             <h2 className="text-xl font-semibold text-gray-300 mb-4">Select Date</h2>
             <DatePicker
@@ -185,33 +400,39 @@ const Test = () => {
               className="w-full px-4 py-2 bg-gray-800 text-gray-300 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
             />
 
-            <h2 className="text-xl font-semibold text-gray-300 mt-6 mb-4">Available Time Slots</h2>
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              {timeSlots.map((slot, index) => (
-                <button
-                  key={index}
-                  className={`px-4 py-2 border rounded-lg text-sm font-medium ${selectedSlot === slot
-                    ? 'bg-blue-700 text-white'
-                    : 'bg-gray-800 text-gray-300 hover:bg-blue-300 hover:text-gray-100'
-                    }`}
-                  onClick={() => setSelectedSlot(slot)}
-                >
-                  {slot}
-                </button>
-              ))}
-            </div>
+            {selectedDate && <>
+              <h2 className="text-xl font-semibold text-gray-300 mt-6 mb-4">Available Time Slots</h2>
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <SlotGrid
+                  slots={slots}
+                  onSlotToggle={handleSlotToggle}
+                  selectedSlots={selectedSlots}
+                  userId={userId}
+                />
 
-            <button
-              onClick={handleBooking}
+              </div></>
+            }
+            <center>
+           {/* <button
+              onClick={bookSlots}
               className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-400 transition-all"
             >
               Book Now
+            </button> */}
+
+            <button
+                onClick={handlePayment}
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                disabled={loading}
+            >
+                payment
             </button>
+            </center>
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Test;
+export default Appointment

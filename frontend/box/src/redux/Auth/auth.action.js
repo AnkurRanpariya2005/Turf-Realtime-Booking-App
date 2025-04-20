@@ -2,10 +2,13 @@ import axios from 'axios';
 import { api, API_BASE_URL } from '../../config/api';
 import { GET_PROFILE_FAILURE, GET_PROFILE_REQUEST, GET_PROFILE_SUCCESS, LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT_REQUEST, LOGOUT_SUCCESS, REGISTER_OWNER_FAILURE, REGISTER_OWNER_REQUEST, REGISTER_OWNER_SUCCESS, REGISTER_USER_FAILURE, REGISTER_USER_REQUEST, REGISTER_USER_SUCCESS, UPDATE_PROFILE_FAILURE, UPDATE_PROFILE_REQUEST, UPDATE_PROFILE_SUCCESS } from './auth.actionType';
 import { toast } from 'react-toastify';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 
 
 export const loginUserAction = (loginData) => async(dispatch) => {
+    
+
     dispatch({type:LOGIN_REQUEST})
     try {
 
@@ -114,12 +117,14 @@ export const updateProfileAction = (requestData) => async(dispatch) => {
     }
 }
 
-export const LogoutAction = () => async (dispatch) => {
+export const LogoutAction = (navigate) => async (dispatch) => {
+    
     dispatch({ type: LOGOUT_REQUEST }); // Start the logout process
   
     try {
       localStorage.removeItem("token"); // Remove the JWT from local storage
       dispatch({ type: LOGOUT_SUCCESS }); // Successfully logged out
+      navigate("/")
       console.log("Logout successful");
     } catch (error) {
       console.error("Logout failed:", error);

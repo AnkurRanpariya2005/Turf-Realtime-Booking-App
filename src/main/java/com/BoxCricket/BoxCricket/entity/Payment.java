@@ -26,8 +26,5 @@ public class Payment {
     private Double amount; // Dynamic amount based on turf pricing
     private String paymentStatus; // "PENDING", "SUCCESS", "FAILED"
     private String paymentGatewayResponseId; // Transaction ID from payment gateway
-
     private LocalDateTime paymentTime;
-
-   
 }

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Navbar1 from '../components/Navbar1'
 import HeroSection from '../components/HeroSection'
 import { Link } from 'react-router-dom'
 import { API_BASE_URL } from '../config/api'
@@ -35,10 +34,10 @@ function Home() {
   getCityByIP();
 
   async function getVenues() {
-    if(city){
+    if(city!=''){
       console.log("City@@@@:", city);
       try {
-        let response = await axios.get(`${API_BASE_URL}/api/home/get/${city}`,{headers});
+        let response = await axios.get(`${API_BASE_URL}/api/home/get/${city}`);
 
         console.log(response.data);
         if (response) {
@@ -52,7 +51,7 @@ function Home() {
     }
     }
     else{
-      let response = await axios.get(`${API_BASE_URL}/api/home/get/top-venues`,{headers});
+      let response = await axios.get(`${API_BASE_URL}/api/home/get/top-venues`);
       setVenues(response.data);
       console.log(response,"@@@@@@");
     }

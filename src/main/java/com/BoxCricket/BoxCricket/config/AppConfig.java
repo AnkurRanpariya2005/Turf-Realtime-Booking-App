@@ -1,6 +1,5 @@
 package com.BoxCricket.BoxCricket.config;
 
-
 import com.BoxCricket.BoxCricket.service.CustomUserDetail;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +39,10 @@ public class AppConfig {
        return http.csrf(customizer -> customizer.disable())
                     .authorizeHttpRequests(request -> request
                                     .requestMatchers("/api/auth/**","/api/**", "/swagger-ui/**","/v3/api-docs/**","/ws/**","/socket.io/**","/api/home/**").permitAll()
-                                    .requestMatchers("/api/user/venue/**","/api/payment/**").permitAll()
+                                    .requestMatchers("/api/home/**","/api/user/venues").permitAll()
                                     .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                                     .requestMatchers("/api/owner/**").hasAuthority("OWNER")
-                                    .requestMatchers("/api/user/**","/api/user/venue/**").hasAuthority("USER")
+                                    .requestMatchers("/api/user/**","/api/user/venues/**").hasAuthority("USER")
                                      .anyRequest().authenticated()
                                             )
                     .httpBasic(Customizer.withDefaults())

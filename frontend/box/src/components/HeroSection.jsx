@@ -1,6 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 function HeroSection() {
+    const [location, setLocation] = useState();
+    const navigate = useNavigate();
+
+    const handleSearch = () => {
+        if (location.trim()) {
+        navigate(`/turfs?location=${location}`);
+        }
+    }
+
     return (
         <div>
 
@@ -14,10 +24,10 @@ function HeroSection() {
                             type="text"
                             placeholder="Enter location"
                             //   value={location}
-                            //   onChange={handleLocationChange}
+                            onChange={(e)=>setLocation(e.target.value)}
                             className="px-6 py-3 rounded-l-lg w-full sm:w-96 bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 sm:mb-0 sm:mr-2"
                         />
-                        <button className="px-8 py-3 bg-blue-800 text-black rounded-r-lg hover:bg-blue-400 transition-all w-full sm:w-auto">
+                        <button onClick={handleSearch} className="px-8 py-3 bg-blue-800 text-black rounded-r-lg hover:bg-blue-400 transition-all w-full sm:w-auto">
                             {/* <SearchIcon className="h-5 w-5 inline-block mr-2" /> */}
                             Search
                         </button>

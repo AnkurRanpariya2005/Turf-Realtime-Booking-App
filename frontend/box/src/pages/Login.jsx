@@ -6,7 +6,7 @@ import { Button, TextField } from "@mui/material";
 import * as Yup from 'yup';
 import PacmanLoader from "react-spinners/PacmanLoader";
 import { useNavigate } from "react-router";
-import Navbar from "../components/Navbar";
+
 
 // Define the validation schema
 const validationSchema = Yup.object({

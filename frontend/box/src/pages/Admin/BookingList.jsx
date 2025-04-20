@@ -3,8 +3,8 @@ import AdminSidebar from './AdminSidebar'
 import axios from 'axios';
 import { API_BASE_URL } from '../../config/api';
 
-function VenueList() {
-    const [venues, setVenues] = useState([]);
+function BookingList() {
+    const [bookings, setBookings] = useState([]);
 
     const token = localStorage.getItem("token");
     const headers = {
@@ -14,9 +14,10 @@ function VenueList() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await axios.get(`${API_BASE_URL}/api/admin/get/all/venues`, { headers });
-            setVenues(response.data.data);
-            console.log(response.data.data);
+            const response = await axios.get(`${API_BASE_URL}/api/admin/bookings`, { headers });
+            console.log(response.data)
+            setBookings(response.data);
+            console.log(response.data);
         }
         fetchData();
 
@@ -41,41 +42,55 @@ function VenueList() {
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" className="px-6 py-3">
-                                        Name
+                                        User Name
                                     </th>
                                     <th scope="col" className="px-6 py-3">
-                                        Location
+                                        Venue Name
                                     </th>
                                     <th scope="col" className="px-6 py-3">
-                                        Dimension
+                                        Venue Location
                                     </th>
                                     <th scope="col" className="px-6 py-3">
-                                        PricePerHours
+                                        Date
+                                    </th>
+                                    <th scope="col" className="px-6 py-3">
+                                        Slot
+                                    </th>
+                                    <th scope="col" className="px-6 py-3">
+                                        Venue Price
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {venues.map((item, index) => (
+                                {bookings.map((item, index) => (
                                     <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
 
                                         <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                                             <img className="w-10 h-10 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-3.jpg" alt="Jese image" />
                                             <div className="ps-3">
-                                                <div className="text-base font-semibold">{item.name}</div>
+                                                <div className="text-base font-semibold">{item.user.name}</div>
 
                                             </div>
                                         </th>
                                         <td className="px-6 py-4">
-                                            {item.location}
+                                            {item.venue.name}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            {item.venue.location}
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center">
-                                                {item.dimension}
+                                                {item.date}
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center">
-                                                {item.pricePerHour}
+                                                {item.slot}
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="flex items-center">
+                                                {item.venue.pricePerHour}
                                             </div>
                                         </td>
                                         
@@ -90,4 +105,4 @@ function VenueList() {
     )
 }
 
-export default VenueList
+export default BookingList

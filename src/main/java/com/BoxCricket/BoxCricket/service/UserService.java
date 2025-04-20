@@ -1,8 +1,11 @@
 package com.BoxCricket.BoxCricket.service;
 
 import com.BoxCricket.BoxCricket.dto.Role;
+import com.BoxCricket.BoxCricket.dto.VenueDto;
+import com.BoxCricket.BoxCricket.entity.Booking;
 import com.BoxCricket.BoxCricket.entity.User;
 import com.BoxCricket.BoxCricket.entity.Venue;
+import com.BoxCricket.BoxCricket.repository.BookingRepository;
 import com.BoxCricket.BoxCricket.repository.UserRepository;
 import com.BoxCricket.BoxCricket.repository.VenueRepository;
 import com.BoxCricket.BoxCricket.response.ApiResponse;
@@ -11,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 import java.util.Map;
@@ -39,6 +42,9 @@ public class UserService {
 
     @Autowired
     private VenueRepository venueRepository;
+
+    @Autowired
+    private BookingRepository bookingRepository;   
 
     
 
@@ -212,5 +218,33 @@ public class UserService {
         return venueRepository.findAll();
     }
 
+    // Count total users
+    public long countUsers() {
+        return userRepository.countByRole(Role.USER); 
+    }
 
+    // Count total owners
+    public long countOwners() {
+        return userRepository.countByRole(Role.OWNER); 
+    }
+ 
+    public List<VenueDto> getAllVenues(String location) {
+        log.info(location+"#######################");
+        if (location != null && !location.isEmpty()) {
+            return venueRepository.findVenuesByLocationContainingIgnoreCase(location);
+        }
+        return venueRepository.findAllVenues();
+    }
+
+    public Venue getVenueById(Long venueId) {
+        return venueRepository.findById(venueId)
+                .orElseThrow(() -> new RuntimeException("Venue not found"));
+    }
+
+    @GetMapping("/my-booking")
+    public List<Booking> myBookings(@RequestHeader("Authorization") String token) {
+        User user = getUserByToken(token);
+        user.setPassword(null);
+        return bookingRepository.findByUserId(user.getId());
+    }
 }

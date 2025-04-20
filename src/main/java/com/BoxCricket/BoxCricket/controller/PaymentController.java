@@ -2,8 +2,7 @@ package com.BoxCricket.BoxCricket.controller;
 
 import java.util.Map;
 
-import com.BoxCricket.BoxCricket.service.StripeService;
-import com.stripe.exception.StripeException;
+import com.BoxCricket.BoxCricket.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,21 +12,10 @@ import org.springframework.web.bind.annotation.*;
 public class PaymentController {
 
     @Autowired
-    private StripeService stripeService;
+    private PaymentService paymentService;
 
     @PostMapping("/create-checkout-session")
     public Map<String, String> createCheckoutSession(@RequestBody Map<String, Object> data) {
-        try {
-            String sessionUrl = stripeService.createCheckoutSession(
-                (String) data.get("currency"),
-                ((Integer) data.get("amount")).longValue(),
-                (String) data.get("successUrl"),
-                (String) data.get("cancelUrl")
-            );
-
-            return Map.of("url", sessionUrl);
-        } catch (StripeException e) {
-            return Map.of("error", e.getMessage());
-        }
+        return paymentService.createCheckoutSession(data);
     }
 }

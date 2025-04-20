@@ -1,25 +1,36 @@
 import {  useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import axios from "axios";
 import { API_BASE_URL } from "../config/api";
 
 const Turfs = () => {
+  const [searchParams] = useSearchParams();
 
   const navigate = useNavigate();
 
   const [turfs, setTurfs] = useState([]);
 
   const getTrufs = async () => {
+    const location = searchParams.get("location");
     try {
       const token = localStorage.getItem("token");
       const headers = {
-        "Authorization": `Bearer ${token}`, // Use Bearer scheme for token
+        "Authorization": `Bearer ${token}`, 
         "Content-Type": "application/json",
       };
-      const response = await axios.get(`${API_BASE_URL}/api/user/venues`, { headers });
-      console.log(response.data);
+
+      if(location==null){
+        const response = await axios.get(`${API_BASE_URL}/api/user/venues`, { headers });
+        console.log(response.data);
+        setTurfs(response.data)
+      }
+      else{
+      console.log(location,"####$$$$$$$$$$%%%%%%%%%%%")
+        const response = await axios.get(`${API_BASE_URL}/api/user/venues?location=${location}`, { headers });
+      
       setTurfs(response.data)
+      }
     } catch (error) {
       console.error("Failed to fetch data:", error);
     }
